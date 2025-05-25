@@ -115,8 +115,9 @@ const Index = () => {
 
                 {/* Дополнительные облачка для объема */}
                 <div className="relative transform -rotate-45">
-                <div className="w-16 h-8 bg-gradient-to-bl from-pink-300 to-transparent rounded-full absolute -top-14 left-1/2 transform translate-x-2 opacity-60"></div>
-                <div className="w-12 h-6 bg-gradient-to-t from-blue-300 to-transparent rounded-full absolute -top-6 left-1/2 transform -translate-x-6 opacity-60"></div>
+                  <div className="w-16 h-8 bg-gradient-to-bl from-pink-300 to-transparent rounded-full absolute -top-14 left-1/2 transform translate-x-2 opacity-60"></div>
+                  <div className="w-12 h-6 bg-gradient-to-t from-blue-300 to-transparent rounded-full absolute -top-6 left-1/2 transform -translate-x-6 opacity-60"></div>
+                </div>
               </div>
 
               <span className="text-lg font-bold mt-8 text-amber-900">

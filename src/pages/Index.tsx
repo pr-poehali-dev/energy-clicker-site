@@ -94,16 +94,34 @@ const Index = () => {
             onClick={handleClick}
             disabled={gameState.energy <= 0}
             className={`
-              w-64 h-64 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 
-              hover:from-purple-400 hover:to-pink-400 text-6xl font-bold shadow-2xl
-              transition-all duration-200 hover:scale-105 active:scale-95
-              ${clickAnimation ? "animate-pulse shadow-purple-500/50" : ""}
-              ${gameState.energy <= 0 ? "opacity-50 cursor-not-allowed" : "hover:shadow-purple-500/30"}
+              w-64 h-64 rounded-full bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600
+              hover:from-yellow-300 hover:via-amber-400 hover:to-yellow-500 shadow-2xl
+              transition-all duration-200 hover:scale-105 active:scale-95 relative overflow-hidden
+              ${clickAnimation ? "animate-pulse shadow-yellow-500/50" : ""}
+              ${gameState.energy <= 0 ? "opacity-50 cursor-not-allowed" : "hover:shadow-yellow-500/30"}
             `}
           >
-            <div className="flex flex-col items-center">
-              <Icon name="Diamond" size={80} />
-              <span className="text-lg font-medium mt-2">КЛИК</span>
+            <div className="flex flex-col items-center relative">
+              {/* Сладкая вата */}
+              <div className="relative">
+                {/* Палочка */}
+                <div className="w-2 h-16 bg-white rounded-full mx-auto mb-2 shadow-sm"></div>
+
+                {/* Вата - синяя часть (снизу) */}
+                <div className="w-20 h-12 bg-gradient-to-t from-blue-400 to-blue-300 rounded-full absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-90"></div>
+
+                {/* Вата - розовая часть (сверху) */}
+                <div className="w-24 h-14 bg-gradient-to-b from-pink-400 to-pink-300 rounded-full absolute -top-16 left-1/2 transform -translate-x-1/2 opacity-90"></div>
+
+                {/* Дополнительные облачка для объема */}
+                <div className="w-16 h-8 bg-gradient-to-br from-pink-300 to-transparent rounded-full absolute -top-14 left-1/2 transform -translate-x-8 opacity-60"></div>
+                <div className="w-16 h-8 bg-gradient-to-bl from-pink-300 to-transparent rounded-full absolute -top-14 left-1/2 transform translate-x-2 opacity-60"></div>
+                <div className="w-12 h-6 bg-gradient-to-t from-blue-300 to-transparent rounded-full absolute -top-6 left-1/2 transform -translate-x-6 opacity-60"></div>
+              </div>
+
+              <span className="text-lg font-bold mt-8 text-amber-900">
+                КЛИК
+              </span>
             </div>
           </Button>
         </div>

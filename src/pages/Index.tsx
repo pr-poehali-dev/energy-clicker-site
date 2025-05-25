@@ -7,6 +7,8 @@ interface GameState {
   shekltk: number;
   energy: number;
   lastEnergyUpdate: number;
+  currentView: "game" | "house";
+  ownedItems: string[];
 }
 
 const Index = () => {
@@ -18,6 +20,8 @@ const Index = () => {
           shekltk: 0,
           energy: 1000,
           lastEnergyUpdate: Date.now(),
+          currentView: "game",
+          ownedItems: [],
         };
   });
 
@@ -72,6 +76,169 @@ const Index = () => {
   };
 
   const energyPercentage = (gameState.energy / 1000) * 100;
+
+  const houseItems = [
+    {
+      id: "bed",
+      name: "🛏️ Кровать",
+      price: 5,
+      description: "Уютная кровать для отдыха",
+    },
+    {
+      id: "table",
+      name: "🪑 Стол",
+      price: 8,
+      description: "Деревянный стол для работы",
+    },
+    {
+      id: "tv",
+      name: "📺 Телевизор",
+      price: 15,
+      description: "Развлечения после работы",
+    },
+    {
+      id: "plant",
+      name: "🪴 Растение",
+      price: 3,
+      description: "Декоративное растение",
+    },
+    {
+      id: "bookshelf",
+      name: "📚 Книжная полка",
+      price: 12,
+      description: "Для хранения знаний",
+    },
+    {
+      id: "sofa",
+      name: "🛋️ Диван",
+      price: 20,
+      description: "Комфортный диван",
+    },
+  ];
+
+  const buyItem = (item: (typeof houseItems)[0]) => {
+    if (
+      gameState.shekltk >= item.price &&
+      !gameState.ownedItems.includes(item.id)
+    ) {
+      setGameState((prev) => ({
+        ...prev,
+        shekltk: prev.shekltk - item.price,
+        ownedItems: [...prev.ownedItems, item.id],
+      }));
+    }
+  };
+
+  const switchView = (view: "game" | "house") => {
+    setGameState((prev) => ({ ...prev, currentView: view }));
+  };
+
+  if (gameState.currentView === "house") {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-900 via-orange-800 to-amber-900 text-white font-['Rubik']">
+        {/* Заголовок дома */}
+        <div className="container mx-auto px-4 py-6">
+          <Card className="bg-amber-800/50 border-orange-500/30 backdrop-blur-sm">
+            <CardHeader className="text-center pb-4">
+              <CardTitle className="text-3xl font-bold text-orange-300">
+                🏠 Мой дом
+              </CardTitle>
+              <p className="text-amber-200">
+                💎 {gameState.shekltk.toFixed(1)} Shekltk
+              </p>
+            </CardHeader>
+          </Card>
+        </div>
+
+        {/* Дом и предметы */}
+        <div className="container mx-auto px-4">
+          {/* Визуализация дома */}
+          <div className="bg-gradient-to-b from-amber-600 to-amber-700 rounded-3xl p-8 mb-6 border-4 border-amber-500/50">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-amber-100">
+                Твоя комната
+              </h3>
+            </div>
+            <div className="grid grid-cols-3 gap-4 min-h-[200px] bg-amber-500/20 rounded-2xl p-6">
+              {gameState.ownedItems.map((itemId) => {
+                const item = houseItems.find((i) => i.id === itemId);
+                return item ? (
+                  <div key={itemId} className="text-center">
+                    <div className="text-4xl mb-2">
+                      {item.name.split(" ")[0]}
+                    </div>
+                    <p className="text-xs text-amber-200">
+                      {item.name.split(" ").slice(1).join(" ")}
+                    </p>
+                  </div>
+                ) : null;
+              })}
+              {gameState.ownedItems.length === 0 && (
+                <div className="col-span-3 text-center text-amber-300 text-lg">
+                  Пустая комната... Купи что-нибудь!
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Магазин предметов */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {houseItems.map((item) => {
+              const isOwned = gameState.ownedItems.includes(item.id);
+              const canBuy = gameState.shekltk >= item.price && !isOwned;
+
+              return (
+                <Card
+                  key={item.id}
+                  className="bg-amber-800/50 border-orange-500/30"
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-bold text-lg text-orange-200">
+                          {item.name}
+                        </h4>
+                        <p className="text-sm text-amber-300">
+                          {item.description}
+                        </p>
+                        <p className="text-orange-400 font-semibold">
+                          💎 {item.price} Shekltk
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => buyItem(item)}
+                        disabled={!canBuy}
+                        className={`ml-4 ${
+                          isOwned
+                            ? "bg-green-600 hover:bg-green-600"
+                            : canBuy
+                              ? "bg-orange-600 hover:bg-orange-500"
+                              : "bg-gray-600 hover:bg-gray-600"
+                        }`}
+                      >
+                        {isOwned ? "✓ Куплено" : canBuy ? "Купить" : "Дорого"}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Кнопка назад */}
+          <div className="text-center pb-6">
+            <Button
+              onClick={() => switchView("game")}
+              className="bg-purple-600 hover:bg-purple-500 text-white px-8 py-3 text-lg"
+            >
+              <Icon name="ArrowLeft" className="mr-2" />
+              Вернуться к игре
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white font-['Rubik']">
